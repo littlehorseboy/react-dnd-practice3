@@ -2,10 +2,11 @@ import React from 'react';
 import { useDrag, DragObjectWithType } from 'react-dnd';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
+import { PlayCard } from '../../../reducers/playCards/playCards';
 
 const useStyles = makeStyles({
   root: {
-    height: 50,
+    height: '100%',
     border: '1px solid blue',
     opacity: 1,
     '&.isDragging': {
@@ -21,26 +22,39 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  id: number;
-  name: string;
-  status: string;
+  cascadeField: PlayCard[];
+  cascadeFieldName: string;
   empty?: boolean;
 }
 
 export interface DragItemI extends DragObjectWithType {
-  id: number;
-  status: string;
+  card: PlayCard;
+  cascadeFieldName: string;
 }
 
 export default function Card(props: Props): JSX.Element {
   const classes = useStyles();
 
+  const card = props.cascadeField.find((cascade): PlayCard => cascade);
+
   const [{ isDragging }, drag] = useDrag({
-    item: { type: 'card', id: props.id, status: props.status },
+    item: {
+      type: 'card',
+      card,
+      cascadeFieldName: props.cascadeFieldName,
+    },
     collect: (monitor): { isDragging: boolean } => ({
       isDragging: monitor.isDragging(),
     }),
   });
+
+  if (!card) {
+    return <></>;
+  }
+
+  const cascadeField = props.cascadeField.filter(
+    (cascade): boolean => !(cascade.suits === card.suits && cascade.number === card.number),
+  );
 
   return (
     <div ref={drag} className={classNames(
@@ -48,7 +62,12 @@ export default function Card(props: Props): JSX.Element {
       { isDragging },
       { empty: props.empty },
     )}>
-      { props.name }
+      {`${card.suits}${card.number}`}
+
+      {cascadeField.length > 0 && <Card
+        cascadeField={cascadeField}
+        cascadeFieldName={props.cascadeFieldName}
+      />}
     </div>
   );
 }

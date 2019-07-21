@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Card, { DragItemI } from '../Card/Card';
+import { changeCascadeFieldName } from '../../../actions/freeCell/freeCell';
 
 const useStyles = makeStyles({
   root: {
@@ -17,20 +18,21 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  status: string;
+  cascadeFieldName: string;
   children: ReactNode;
-  updateCardStatus: (cardId: number, targetStatus: string) => void;
 }
 
 export default function CardWall(props: Props): JSX.Element {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'card',
     drop: (item: DragItemI): void | undefined => {
-      props.updateCardStatus(item.id, props.status);
+      dispatch(changeCascadeFieldName(item.card, item.cascadeFieldName, props.cascadeFieldName));
     },
-    canDrop: (item: DragItemI): boolean => item.status !== props.status,
+    canDrop: (item: DragItemI): boolean => item.cascadeFieldName !== props.cascadeFieldName,
     collect: (monitor): { isOver: boolean; canDrop: boolean } => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -38,13 +40,17 @@ export default function CardWall(props: Props): JSX.Element {
   });
 
   return (
-    <Grid ref={drop} item xs={6} sm={3} className={classes.root}>
-      <p>{props.status}</p>
+    <div ref={drop} className={classes.root}>
+      <p>{props.cascadeFieldName}</p>
       <div className={classes.cardWallContent}>
         {props.children}
 
-        {isOver && canDrop && <Card id={0} name={''} status={''} empty />}
+        {isOver && canDrop && <Card
+          cascadeField={[]}
+          cascadeFieldName={''}
+          empty
+        />}
       </div>
-    </Grid>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { PlayCard } from '../../reducers/playCards/playCards';
 import { CardCascadesI } from '../../reducers/freeCell/freeCell';
 
 export const FILLCARDCASCADES = 'FILLCARDCASCADES';
@@ -16,4 +17,28 @@ export const fillCardCascades = (cardCascades: CardCascadesI): FillCardCascadesA
   },
 });
 
-export type FreeCellActionTypes = FillCardCascadesActionI;
+export const CHANGECASCADEFIELDNAME = 'CHANGECASCADEFIELDNAME';
+
+interface ChangeCascadeFieldNameActionI {
+  type: typeof CHANGECASCADEFIELDNAME;
+  payload: {
+    card: PlayCard;
+    currentCascadeFieldName: string;
+    targetCascadeFieldName: string;
+  };
+}
+
+export const changeCascadeFieldName = (
+  card: PlayCard,
+  currentCascadeFieldName: string,
+  targetCascadeFieldName: string,
+): ChangeCascadeFieldNameActionI => ({
+  type: CHANGECASCADEFIELDNAME,
+  payload: {
+    card,
+    currentCascadeFieldName,
+    targetCascadeFieldName,
+  },
+});
+
+export type FreeCellActionTypes = FillCardCascadesActionI | ChangeCascadeFieldNameActionI;

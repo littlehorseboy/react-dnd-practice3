@@ -1,5 +1,5 @@
 import { PlayCard } from '../playCards/playCards';
-import { FILLCARDCASCADES, FreeCellActionTypes } from '../../actions/freeCell/freeCell';
+import { FILLCARDCASCADES, FreeCellActionTypes, CHANGECASCADEFIELDNAME } from '../../actions/freeCell/freeCell';
 
 export interface CardCascadesI {
   first: null[] | PlayCard[];
@@ -10,6 +10,7 @@ export interface CardCascadesI {
   sixth: null[] | PlayCard[];
   seventh: null[] | PlayCard[];
   eighth: null[] | PlayCard[];
+  [key: string]: null[] | PlayCard[];
 }
 
 export interface FreeCell {
@@ -49,12 +50,70 @@ const initState: FreeCell = {
 };
 
 const reducer = (state = initState, action: FreeCellActionTypes): FreeCell => {
+  const changeCascadeFieldName = (
+    card: PlayCard,
+    currentCascadeFieldName: string,
+    targetCascadeFieldName: string,
+  ): { [propName: string]: PlayCard[] } => {
+    const findCardCascadeIndex = (state.cardCascades[currentCascadeFieldName] as PlayCard[])
+      .findIndex((cardCascade): boolean => cardCascade.suits === card.suits
+        && cardCascade.number === card.number);
+
+    const currentField = (state.cardCascades[currentCascadeFieldName] as PlayCard[])
+      .slice(0, findCardCascadeIndex);
+
+    const targetField = (state.cardCascades[currentCascadeFieldName] as PlayCard[])
+      .slice(findCardCascadeIndex);
+
+    return {
+      [currentCascadeFieldName]: currentField,
+      [targetCascadeFieldName]: [
+        ...(state.cardCascades[targetCascadeFieldName] as PlayCard[]),
+        ...targetField,
+      ],
+    };
+
+    // const findCardCascade = (state.cardCascades[currentCascadeFieldName] as PlayCard[])
+    //   .find((cardCascade): boolean => cardCascade.suits === card.suits
+    //     && cardCascade.number === card.number);
+
+    // if (!findCardCascade) {
+    //   return {
+    //     [currentCascadeFieldName]: (state.cardCascades[currentCascadeFieldName] as PlayCard[]),
+    //     [targetCascadeFieldName]: (state.cardCascades[targetCascadeFieldName] as PlayCard[]),
+    //   };
+    // }
+
+    // return {
+    //   [currentCascadeFieldName]: (state.cardCascades[currentCascadeFieldName] as PlayCard[])
+    //     .filter((cardCascade): boolean => !(cardCascade.suits === card.suits
+    //       && cardCascade.number === card.number)),
+    //   [targetCascadeFieldName]: [
+    //     ...(state.cardCascades[targetCascadeFieldName] as PlayCard[]),
+    //     findCardCascade,
+    //   ],
+    // };
+  };
+
   switch (action.type) {
     case FILLCARDCASCADES:
       return {
         emptyCell: state.emptyCell,
         cardCascades: {
           ...action.payload.cardCascades,
+        },
+        foundations: state.foundations,
+      };
+    case CHANGECASCADEFIELDNAME:
+      return {
+        emptyCell: state.emptyCell,
+        cardCascades: {
+          ...state.cardCascades,
+          ...changeCascadeFieldName(
+            action.payload.card,
+            action.payload.currentCascadeFieldName,
+            action.payload.targetCascadeFieldName,
+          ),
         },
         foundations: state.foundations,
       };
