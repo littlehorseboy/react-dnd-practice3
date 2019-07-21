@@ -72,27 +72,6 @@ const reducer = (state = initState, action: FreeCellActionTypes): FreeCell => {
         ...targetField,
       ],
     };
-
-    // const findCardCascade = (state.cardCascades[currentCascadeFieldName] as PlayCard[])
-    //   .find((cardCascade): boolean => cardCascade.suits === card.suits
-    //     && cardCascade.number === card.number);
-
-    // if (!findCardCascade) {
-    //   return {
-    //     [currentCascadeFieldName]: (state.cardCascades[currentCascadeFieldName] as PlayCard[]),
-    //     [targetCascadeFieldName]: (state.cardCascades[targetCascadeFieldName] as PlayCard[]),
-    //   };
-    // }
-
-    // return {
-    //   [currentCascadeFieldName]: (state.cardCascades[currentCascadeFieldName] as PlayCard[])
-    //     .filter((cardCascade): boolean => !(cardCascade.suits === card.suits
-    //       && cardCascade.number === card.number)),
-    //   [targetCascadeFieldName]: [
-    //     ...(state.cardCascades[targetCascadeFieldName] as PlayCard[]),
-    //     findCardCascade,
-    //   ],
-    // };
   };
 
   switch (action.type) {
