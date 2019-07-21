@@ -1,17 +1,20 @@
 import { PlayCard } from '../playCards/playCards';
+import { FILLCARDCASCADES, FreeCellActionTypes } from '../../actions/freeCell/freeCell';
 
-interface FreeCell {
+export interface CardCascadesI {
+  first: null[] | PlayCard[];
+  second: null[] | PlayCard[];
+  third: null[] | PlayCard[];
+  fourth: null[] | PlayCard[];
+  fifth: null[] | PlayCard[];
+  sixth: null[] | PlayCard[];
+  seventh: null[] | PlayCard[];
+  eighth: null[] | PlayCard[];
+}
+
+export interface FreeCell {
   emptyCell: null[] | PlayCard[];
-  cardCascade: {
-    first: null[] | PlayCard[];
-    second: null[] | PlayCard[];
-    third: null[] | PlayCard[];
-    fourth: null[] | PlayCard[];
-    fifth: null[] | PlayCard[];
-    sixth: null[] | PlayCard[];
-    seventh: null[] | PlayCard[];
-    eighth: null[] | PlayCard[];
-  };
+  cardCascades: CardCascadesI;
   foundations: {
     first: null[] | PlayCard[];
     second: null[] | PlayCard[];
@@ -26,7 +29,7 @@ const initState: FreeCell = {
   // 空白區: 4 張的位置自由擺放牌組，影響遊戲區拖放數量
   emptyCell: [null, null, null, null],
   // 遊戲區：8 個亂數牌區隨機擺放 52 張 (4 個區各擺放 7 張，4 個區各擺放 6 張)
-  cardCascade: {
+  cardCascades: {
     first: [],
     second: [],
     third: [],
@@ -45,6 +48,19 @@ const initState: FreeCell = {
   },
 };
 
-const reducer = (state = initState): FreeCell => state;
+const reducer = (state = initState, action: FreeCellActionTypes): FreeCell => {
+  switch (action.type) {
+    case FILLCARDCASCADES:
+      return {
+        emptyCell: state.emptyCell,
+        cardCascades: {
+          ...action.payload.cardCascades,
+        },
+        foundations: state.foundations,
+      };
+    default:
+      return state;
+  }
+};
 
 export default reducer;

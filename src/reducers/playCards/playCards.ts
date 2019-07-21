@@ -4,7 +4,7 @@ export interface PlayCard {
   number: number;
 }
 
-interface PlayCards {
+export interface PlayCards {
   playCards: PlayCard[];
 }
 

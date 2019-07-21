@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import CardWall from '../../components/CardCascade/CardWall/CardWall';
 import Card from '../../components/CardCascade/Card/Card';
 import { PlayCard } from '../../reducers/playCards/playCards';
+import { FreeCell } from '../../reducers/freeCell/freeCell';
+import { fillCardCascades } from '../../actions/freeCell/freeCell';
 
 const useStyles = makeStyles({
   root: {
@@ -20,8 +22,33 @@ export default function Main(): JSX.Element {
     state: { playCardsReducer: { playCards: PlayCard[] } },
   ): PlayCard[] => state.playCardsReducer.playCards);
 
-  const spads = playCards.slice(0, 13);
-  const heart = playCards.slice(13, 26);
+  const freeCell = useSelector((
+    state: { freeCellReducer: FreeCell },
+  ): FreeCell => state.freeCellReducer);
+
+  const dispatch = useDispatch();
+
+  useEffect((): void => {
+    const first = playCards.slice(0, 7).reverse();
+    const second = playCards.slice(7, 14).reverse();
+    const third = playCards.slice(14, 21).reverse();
+    const fourth = playCards.slice(21, 28).reverse();
+    const fifth = playCards.slice(28, 34).reverse();
+    const sixth = playCards.slice(34, 40).reverse();
+    const seventh = playCards.slice(40, 46).reverse();
+    const eighth = playCards.slice(46, 52).reverse();
+
+    dispatch(fillCardCascades({
+      first,
+      second,
+      third,
+      fourth,
+      fifth,
+      sixth,
+      seventh,
+      eighth,
+    }));
+  }, []);
 
   const [cards, setCards] = useState([
     { id: 1, name: 'issue 1', status: 'todo' },
