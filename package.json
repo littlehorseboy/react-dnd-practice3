@@ -21,6 +21,7 @@
     "@types/jest": "^24.0.15",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
+    "@types/redux-logger": "^3.0.7",
     "@typescript-eslint/eslint-plugin": "^1.12.0",
     "@typescript-eslint/parser": "^1.12.0",
     "awesome-typescript-loader": "^5.2.1",
@@ -45,12 +46,16 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.2.0",
+    "@types/react-redux": "^7.1.1",
     "classnames": "^2.2.6",
     "core-js": "^3.1.4",
     "react": "^16.8.6",
     "react-dnd": "^9.3.2",
     "react-dnd-html5-backend": "^9.3.2",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
     "regenerator-runtime": "^0.13.2"
   }
 }

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import CardWall from '../../components/CardWall/CardWall';
-import Card from '../../components/Card/Card';
+import CardWall from '../../components/CardCascad/CardWall/CardWall';
+import Card from '../../components/CardCascad/Card/Card';
 
 const useStyles = makeStyles({
   root: {
