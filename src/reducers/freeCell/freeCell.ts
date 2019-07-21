@@ -2,7 +2,7 @@ import { PlayCard } from '../playCards/playCards';
 
 interface FreeCell {
   emptyCell: null[] | PlayCard[];
-  cardCascad: {
+  cardCascade: {
     first: null[] | PlayCard[];
     second: null[] | PlayCard[];
     third: null[] | PlayCard[];
@@ -26,7 +26,7 @@ const initState: FreeCell = {
   // 空白區: 4 張的位置自由擺放牌組，影響遊戲區拖放數量
   emptyCell: [null, null, null, null],
   // 遊戲區：8 個亂數牌區隨機擺放 52 張 (4 個區各擺放 7 張，4 個區各擺放 6 張)
-  cardCascad: {
+  cardCascade: {
     first: [],
     second: [],
     third: [],

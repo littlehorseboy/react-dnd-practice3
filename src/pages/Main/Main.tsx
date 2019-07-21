@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import CardWall from '../../components/CardCascad/CardWall/CardWall';
-import Card from '../../components/CardCascad/Card/Card';
+import CardWall from '../../components/CardCascade/CardWall/CardWall';
+import Card from '../../components/CardCascade/Card/Card';
+import { PlayCard } from '../../reducers/playCards/playCards';
 
 const useStyles = makeStyles({
   root: {
-
-  },
-  board: {
 
   },
 });
 
 export default function Main(): JSX.Element {
   const classes = useStyles();
+
+  const playCards = useSelector((
+    state: { playCardsReducer: { playCards: PlayCard[] } },
+  ): PlayCard[] => state.playCardsReducer.playCards);
+
+  const spads = playCards.slice(0, 13);
+  const heart = playCards.slice(13, 26);
 
   const [cards, setCards] = useState([
     { id: 1, name: 'issue 1', status: 'todo' },
@@ -41,7 +47,7 @@ export default function Main(): JSX.Element {
 
   return (
     <div className={classes.root}>
-      <Container maxWidth={false} className={classes.board}>
+      <Container maxWidth={false}>
         <Grid container spacing={2}>
           {['todo', 'develop', 'test', 'deploy'].map((status): JSX.Element => (
             <CardWall key={status} status={status} updateCardStatus={updateCardStatus}>
